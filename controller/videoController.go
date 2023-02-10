@@ -2,10 +2,13 @@ package controller
 
 import (
 	"dousheng/data"
+
 	"dousheng/service"
+
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+
 	"strconv"
 	"time"
 )
@@ -57,40 +60,41 @@ func Feed(c *gin.Context) {
 }
 
 // Publish check token then save upload file to public directory
-//func Publish(c *gin.Context) {
-//	token := c.PostForm("token")
-//
-//	if _, exist := usersLoginInfo[token]; !exist {
-//		c.JSON(http.StatusOK, data.Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
-//		return
-//	}
-//
-//	data1, err := c.FormFile("data")
-//	if err != nil {
-//		c.JSON(http.StatusOK, data.Response{
-//			StatusCode: 1,
-//			StatusMsg:  err.Error(),
-//		})
-//		return
-//	}
-//
-//	filename := filepath.Base(data1.Filename)
-//	user := usersLoginInfo[token]
-//	finalName := fmt.Sprintf("%d_%s", user.Id, filename)
-//	saveFile := filepath.Join("./public/", finalName)
-//	if err := c.SaveUploadedFile(data, saveFile); err != nil {
-//		c.JSON(http.StatusOK, data.Response{
-//			StatusCode: 1,
-//			StatusMsg:  err.Error(),
-//		})
-//		return
-//	}
-//
-//	c.JSON(http.StatusOK, data.Response{
-//		StatusCode: 0,
-//		StatusMsg:  finalName + " uploaded successfully",
-//	})
-//}
+func Publish(c *gin.Context) {
+	//token := c.PostForm("token")
+	//
+	//if _, exist := usersLoginInfo[token]; !exist {
+	//	c.JSON(http.StatusOK, data.Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+	//	return
+	//}
+	//TODO: token -> user
+	videoData, err := c.FormFile("data")
+	if err != nil {
+		c.JSON(http.StatusOK, data.Response{
+			StatusCode: 1,
+			StatusMsg:  err.Error(),
+		})
+		return
+	}
+	videoTitle := c.PostForm("title")
+	log.Printf("title : %v", videoTitle)
+	var userId int64
+	userId = 1
+
+	var videoService service.VideoServiceImpl
+	err = videoService.Publish(videoData, userId, videoTitle)
+	if err != nil {
+		c.JSON(http.StatusOK, data.Response{
+			StatusCode: 1,
+			StatusMsg:  err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, data.Response{
+		StatusCode: 0,
+		StatusMsg:  videoTitle + " uploaded successfully",
+	})
+}
 
 // PublishList all users have same publish video list
 func PublishList(c *gin.Context) {

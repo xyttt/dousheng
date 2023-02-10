@@ -80,3 +80,15 @@ func SelectVideoByUserId(userID int64) ([]data.DBVideo, error) {
 	res := db.Table("videos").Where("author_id = ?", userID).Order("publish_time desc").Find(&dbvideos)
 	return dbvideos, res.Error
 }
+
+func InsertVideo(authorId int64, playUrl string, coverUrl string, title string) error {
+	db := GetDB()
+	video := data.DBVideo{
+		AuthorId: authorId,
+		PlayUrl:  playUrl,
+		CoverUrl: coverUrl,
+		Title:    title,
+	}
+	res := db.Table("videos").Select("author_id", "play_url", "cover_url", "title").Create(&video)
+	return res.Error
+}

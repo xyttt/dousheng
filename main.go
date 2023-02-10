@@ -2,12 +2,15 @@ package main
 
 import (
 	"dousheng/dao"
+	"dousheng/middleware/MinIO"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	dao.Init()
 	dao.CreateTables()
+
+	MinIO.Init()
 
 	//go service.RunMessageServer() //这是什么意思？？
 

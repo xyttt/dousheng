@@ -1,10 +1,18 @@
 package service
 
 import (
+	"bytes"
 	"dousheng/config"
 	"dousheng/dao"
 	"dousheng/data"
+	"dousheng/middleware/FFmpeg"
+	"dousheng/middleware/MinIO"
+	"fmt"
 	"log"
+	"mime/multipart"
+	"path"
+	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -85,4 +93,29 @@ func (v VideoServiceImpl) PubList(userId int64) ([]data.Video, error) {
 
 	return videos, err
 
+}
+
+func (v VideoServiceImpl) Publish(videoData *multipart.FileHeader, userId int64, videoTitle string) error {
+	filename := filepath.Base(videoData.Filename)
+	fileSuffix := path.Ext(filename)
+	filenameOnly := strings.TrimSuffix(filename, fileSuffix)
+	finalName := fmt.Sprintf("%d_%s", userId, filename)
+	var videoBuf bytes.Buffer
+	var err error
+	var videoURL, coverURL string
+
+	file, _ := videoData.Open()
+	_, err = videoBuf.ReadFrom(file)
+
+	videoURL, err = MinIO.FileUpLoader(&videoBuf, "videos/"+finalName, "application/octet-stream")
+
+	var coverBuf bytes.Buffer
+
+	err = FFmpeg.GetCover(&coverBuf, videoURL)
+
+	coverURL, err = MinIO.FileUpLoader(&coverBuf, "covers/"+filenameOnly+".jpeg", "image/jpeg")
+
+	err = dao.InsertVideo(userId, videoURL, coverURL, videoTitle)
+
+	return err
 }

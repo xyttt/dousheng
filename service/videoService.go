@@ -2,6 +2,7 @@ package service
 
 import (
 	"dousheng/data"
+	"mime/multipart"
 	"time"
 )
 
@@ -13,4 +14,6 @@ type VideoServicer interface {
 	Feed(latestTime time.Time, userId int64) ([]data.Video, int64, error)
 
 	PubList(userId int64) ([]data.Video, error)
+
+	Publish(videoData *multipart.FileHeader, userId int64, videoTitle string) error
 }
