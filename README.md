@@ -18,6 +18,8 @@ gogogo团队
 
 - **省略中途本地存储的步骤，视频流直接转存到MinIO， 使用URL取帧获得cover**，不知道能否使用视频流获得cover
 
+2023.2.13 wangmingxian 简单说明：完成Register, Login, User三个部分及jwt鉴权
+
 
 
 

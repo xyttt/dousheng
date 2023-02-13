@@ -24,3 +24,9 @@ const BucketName = "doushengbuc"
 const Location = "cn-north-1"
 
 // MinIO URL
+
+// 时间常量
+var OneDayOfHours = 60 * 60 * 24
+
+// Secret 密钥
+var Secret = "dousheng"
