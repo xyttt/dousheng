@@ -38,7 +38,7 @@ func Auth() gin.HandlerFunc {
 		} else {
 			println("token 正确")
 		}
-		context.Set("userId", token.Id)
+		context.Set("user_id", token.Id)
 		context.Next()
 	}
 }
@@ -64,7 +64,7 @@ func AuthWithoutLogin() gin.HandlerFunc {
 				println("token 正确")
 			}
 		}
-		context.Set("userId", userId)
+		context.Set("user_id", userId)
 		context.Next()
 	}
 }
