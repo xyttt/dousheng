@@ -13,6 +13,7 @@ func main() {
 	dao.CreateTables()
 
 	MinIO.Init()
+
 	tool.InitMq()
 	redis.InitRedis()
 	//go service.RunMessageServer() //这是什么意思？？
