@@ -3,13 +3,14 @@ package dao
 import (
 	"dousheng/config"
 	"fmt"
+	"log"
+	"os"
+	"time"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
-	"log"
-	"os"
-	"time"
 )
 
 var DB *gorm.DB
@@ -31,11 +32,11 @@ type videos struct {
 	Title       string    `gorm:"column:title; not null; type:varchar(255); comment:'视频标题'"`
 }
 
-type favorites struct {
+type Favorite struct {
 	Id         int64 `gorm:"column:id; not null; type:bigint; primaryKey; autoIncrement; comment:'点赞id'"`
 	UserId     int64 `gorm:"column:user_id; not null; type:bigint; comment:'用户id'"`
 	VideoId    int64 `gorm:"column:video_id; not null; type:bigint; comment:'用户点赞视频id'"`
-	IsFavorite int8  `gorm:"column:is_favorite; not null; type:tinyint; default:1 ;comment:'是否点赞，默认为1'"`
+	ActionType int32 `gorm:"column:action_type; not null; type:tinyint; default:1 ;comment:'点赞行为, 点赞为1;取消点赞为0'"`
 }
 
 type follows struct {
@@ -62,6 +63,11 @@ type comments struct {
 }
 
 func CreateTables() {
+	// DB.Migrator().DropTable(&users{})
+	// DB.Migrator().DropTable(&videos{})
+	// DB.Migrator().DropTable(&Favorite{})
+	// DB.Migrator().DropTable(&follows{})
+	// DB.Migrator().DropTable(&comments{})
 	if !DB.Migrator().HasTable(&users{}) {
 		DB.AutoMigrate(&users{})
 		log.Print("successfully created table-users")
@@ -76,8 +82,8 @@ func CreateTables() {
 		log.Print("table-videos existed")
 	}
 
-	if !DB.Migrator().HasTable(&favorites{}) {
-		DB.AutoMigrate(&favorites{})
+	if !DB.Migrator().HasTable(&Favorite{}) {
+		DB.AutoMigrate(&Favorite{})
 		log.Print("successfully created table-favorites")
 	} else {
 		log.Print("table-favorites existed")

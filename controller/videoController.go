@@ -5,9 +5,10 @@ import (
 
 	"dousheng/service"
 
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 
 	"strconv"
 	"time"
@@ -98,8 +99,7 @@ func Publish(c *gin.Context) {
 
 // PublishList all users have same publish video list
 func PublishList(c *gin.Context) {
-
-	strUserId := c.Query("user_id")
+	strUserId := c.GetString("user_id")
 	userId, _ := strconv.ParseInt(strUserId, 10, 64)
 	log.Printf("user_id : %v", userId)
 

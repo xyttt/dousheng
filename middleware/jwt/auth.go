@@ -2,7 +2,6 @@ package jwt
 
 import (
 	"dousheng/config"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -40,7 +39,6 @@ func Auth() gin.HandlerFunc {
 			println("token 正确")
 		}
 		context.Set("userId", token.Id)
-		fmt.Println("token.Id:", token.Id)
 		context.Next()
 	}
 }
