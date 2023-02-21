@@ -118,6 +118,12 @@ func FollowerList(c *gin.Context) {
 }
 
 func FriendList(c *gin.Context) {
+	curId, err1 := strconv.ParseInt(strings.TrimSpace(c.GetString("userId")), 10, 64)
+	if err1 != nil {
+		log.Println(err1.Error())
+		c.JSON(http.StatusOK, data.Response{StatusCode: -1, StatusMsg: err1.Error()})
+		return
+	}
 	uid, err := strconv.Atoi(c.Query("user_id"))
 	if err != nil {
 		c.JSON(http.StatusOK, data.Response{StatusCode: -1, StatusMsg: err.Error()})
@@ -129,12 +135,8 @@ func FriendList(c *gin.Context) {
 		c.JSON(http.StatusOK, data.Response{StatusCode: -1, StatusMsg: "invalid UserId or Token!"})
 		return
 	}
-	//TODO:JWT？
 
-	resp, err := service.FriendList(&data.DouyinRelationFollowListRequest{
-		UserId: Userid, //ToUserID
-		Token:  Token,
-	}, Userid) //第二个参数实际上是JWT后的Userid
+	resp, err := service.FriendList(Userid, curId) //第二个参数实际上是JWT后的Userid
 
 	if err != nil {
 		c.JSON(http.StatusOK, data.Response{StatusCode: -1, StatusMsg: err.Error()})

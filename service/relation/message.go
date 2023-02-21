@@ -31,7 +31,7 @@ func SendMessage(res *data.DouyinMessageActionRequest) error {
 }
 
 func HistoryMessage(res *data.DouyinMessageHistoryRequest) ([]*data.Message, error) {
-	messages, err := dao.MessageHistory(res.UserId, res.ToUserId)
+	messages, err := dao.MessageHistory(res.UserId, res.ToUserId, res.LastTime)
 	if err != nil {
 		return nil, err
 	}

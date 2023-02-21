@@ -10,6 +10,7 @@ type DouyinMessageActionRequest struct {
 type DouyinMessageHistoryRequest struct {
 	UserId   int64 // 用户Id，token鉴权得到
 	ToUserId int64
+	LastTime int64
 }
 type DouyinMessageHistoryResponse struct {
 	Response
