@@ -37,6 +37,7 @@ func Register(c *gin.Context) {
 			Response: data.Response{StatusCode: 1, StatusMsg: "User already exist"},
 		})
 	} else {
+		fmt.Println(service.EnCoder(password))
 		newUser, _ := dao.WriteTable(username, service.EnCoder(password))
 		if dao.InsertTableUser(&newUser) != true {
 			fmt.Println("insert data fail")

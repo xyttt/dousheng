@@ -15,9 +15,11 @@ import (
 var DB *gorm.DB
 
 type users struct {
-	Id       int64  `gorm:"column:id; not null; type:bigint; primaryKey; autoIncrement; comment:'用户id'"`
-	Name     string `gorm:"column:name; not null; type:varchar(255); comment:'用户名'"`
-	Password string `gorm:"column:password; not null; type:varchar(255); comment:'用户密码'"`
+	Id             int64  `gorm:"column:id; not null; type:bigint; primaryKey; autoIncrement; comment:'用户id'"`
+	Name           string `gorm:"column:name; not null; type:varchar(255); comment:'用户名'"`
+	Password       string `gorm:"column:password; not null; type:varchar(255); comment:'用户密码'"`
+	FollowingCount int64  `gorm:"column:following_count; default:0; type:varchar(255); comment:'关注数量'"`
+	FollowerCount  int64  `gorm:"column:follower_count; default:0; type:varchar(255); comment:'粉丝数量'"`
 }
 
 type videos struct {
@@ -39,8 +41,15 @@ type favorites struct {
 type follows struct {
 	Id       int64 `gorm:"column:id; not null; type:bigint; primaryKey; autoIncrement; comment:'关注id'"`
 	UserId   int64 `gorm:"column:user_id; not null; type:bigint; comment:'用户id'"`
-	FollowId int64 `gorm:"column:followed_id; not null; type:bigint; comment:'被关注者id'"`
+	FollowId int64 `gorm:"column:to_user_id; not null; type:bigint; comment:'被关注者id'"`
 	IsFollow int8  `gorm:"column:is_follow; not null; type:tinyint; default:1 ;comment:'是否关注，默认为1'"`
+}
+
+type messages struct {
+	gorm.Model
+	UserId   int64  `gorm:"column:user_id; not null; type:bigint; comment:'消息发送者id'"`
+	ToUserId int64  `gorm:"column:to_user_id; not null; type:bigint; comment:'消息接收者id'"`
+	Content  string `gorm:"column:content; not null; type:varchar(255); comment:'消息内容'"`
 }
 
 type comments struct {
@@ -79,6 +88,13 @@ func CreateTables() {
 		log.Print("successfully created table-follows")
 	} else {
 		log.Print("table-follows existed")
+	}
+
+	if !DB.Migrator().HasTable(&messages{}) {
+		DB.AutoMigrate(&messages{})
+		log.Print("successfully created table-message")
+	} else {
+		log.Print("table-message existed")
 	}
 
 	if !DB.Migrator().HasTable(&comments{}) {

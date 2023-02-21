@@ -2,17 +2,16 @@ package data
 
 import "time"
 
-type Response struct {
-	StatusCode int32  `json:"status_code"`
-	StatusMsg  string `json:"status_msg,omitempty"`
-}
-
 type User struct {
 	Id            int64  `json:"id"`
 	Name          string `json:"name"`
 	FollowCount   int64  `json:"follow_count"`
 	FollowerCount int64  `json:"follower_count"`
 	IsFollow      bool   `json:"is_follow"`
+}
+
+func (User) TableName() string {
+	return "users"
 }
 
 type Video struct {
