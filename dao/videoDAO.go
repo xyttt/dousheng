@@ -16,7 +16,7 @@ func SelectFeedByTimeId(latestTime time.Time, userID int64) ([]data.DBVideo, err
 func CountFavorite(videoId int64) (int64, error) {
 	db := GetDB()
 	var count int64
-	res := db.Table("favorites").Where("video_id = ? AND is_favorite = 1", videoId).Count(&count)
+	res := db.Table("favorites").Where("video_id = ? AND action_type = ?", videoId, 1).Count(&count)
 	return count, res.Error
 }
 
@@ -31,7 +31,7 @@ func JudgeIsFavorite(videoId int64, userID int64) (bool, error) {
 	db := GetDB()
 	var count int64
 	//TODO：可改进
-	res := db.Table("favorites").Where("video_id = ? AND user_id = ? AND is_favorite = 1", videoId, userID).Count(&count)
+	res := db.Table("favorites").Where("video_id = ? AND user_id = ? AND action_type = 1", videoId, userID).Count(&count)
 	if count > 0 {
 		return true, res.Error
 	} else {
