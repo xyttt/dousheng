@@ -2,6 +2,7 @@ package main
 
 import (
 	"dousheng/dao"
+	"dousheng/gateway"
 	"dousheng/middleware/MinIO"
 	tool "dousheng/middleware/rabbitMQ"
 	"dousheng/middleware/redis"
@@ -20,7 +21,7 @@ func main() {
 
 	r := gin.Default()
 
-	initRouter(r)
+	gateway.InitRouter(r)
 
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }

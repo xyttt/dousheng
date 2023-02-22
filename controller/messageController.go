@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // 聊天记录
@@ -19,11 +20,22 @@ func MessageChat(c *gin.Context) {
 		return
 	}
 	uid, err := strconv.Atoi(c.Query("to_user_id"))
-	lastTime, err1 := strconv.Atoi(c.Query("pre_msg_time"))
-	if err != nil || err1 != nil {
-		c.JSON(http.StatusOK, data.Response{StatusCode: -1, StatusMsg: err.Error() + err1.Error()})
+	if err != nil {
+		c.JSON(http.StatusOK, data.Response{StatusCode: -1, StatusMsg: err.Error()})
 		return
 	}
+
+	lastTime := c.Query("pre_msg_time")
+	log.Print("Received latest_time: " + lastTime)
+	var latestTime time.Time
+	if lastTime != "" {
+		int64Time, _ := strconv.ParseInt(lastTime, 10, 64)
+		latestTime = time.Unix(int64Time/1000, 0)
+	} else {
+		latestTime = time.Now()
+	}
+	log.Printf("latestTime UTS:%v", latestTime)
+
 	ToUserid := int64(uid)
 	Token := c.Query("token")
 	if len(Token) == 0 || ToUserid < 0 {
@@ -34,7 +46,7 @@ func MessageChat(c *gin.Context) {
 	message, err := service.HistoryMessage(&data.DouyinMessageHistoryRequest{
 		UserId:   curId, // TODO:修改为鉴权
 		ToUserId: ToUserid,
-		LastTime: int64(lastTime),
+		LastTime: latestTime,
 	})
 
 	if err != nil {
@@ -54,7 +66,12 @@ func MessageChat(c *gin.Context) {
 
 // 发送消息
 func MessageAction(c *gin.Context) {
-	uid, err := strconv.Atoi(c.Query("user_id"))
+	curId, err1 := strconv.ParseInt(strings.TrimSpace(c.GetString("userId")), 10, 64)
+	if err1 != nil {
+		c.JSON(http.StatusOK, data.Response{StatusCode: -1, StatusMsg: err1.Error()})
+		return
+	}
+	uid, err := strconv.Atoi(c.Query("to_user_id"))
 	action, err := strconv.Atoi(c.Query("action_type"))
 	content := c.Query("content")
 	if err != nil {
@@ -64,15 +81,13 @@ func MessageAction(c *gin.Context) {
 	Userid := int64(uid)
 	Token := c.Query("token")
 	if len(Token) == 0 || Userid < 0 || action != 1 {
-		c.JSON(http.StatusOK, data.Response{StatusCode: -1, StatusMsg: "invalid UserId or Token!"})
+		c.JSON(http.StatusOK, data.Response{StatusCode: -1, StatusMsg: "invalid UserId or Token or actionType!"})
 		return
 	}
-	//TODO:JWT
-
 	//调service层函数
 	err = service.SendMessage(&data.DouyinMessageActionRequest{
 		Content:  content,
-		UserId:   Userid, // TODO:修改为鉴权
+		UserId:   curId, // TODO:修改为鉴权
 		ToUserId: Userid,
 	})
 

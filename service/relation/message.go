@@ -25,7 +25,7 @@ func SendMessage(res *data.DouyinMessageActionRequest) error {
 	if err2 != nil {
 		return err2
 	}
-	tool.RmqFollowAdd.Publish(sb.String())
+	tool.RmqMeaasge.Publish(sb.String())
 	log.Println("消息打入成功。")
 	return nil
 }

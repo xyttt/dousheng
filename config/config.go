@@ -4,7 +4,7 @@ const VideoNum = 5 // != 0
 
 // SQL相关
 const DBusername = "root"
-const DBpassword = "123456"
+const DBpassword = "WZR170816"
 const DBhost = "127.0.0.1"
 const DBport = 3306
 const DBname = "simpledouyin"

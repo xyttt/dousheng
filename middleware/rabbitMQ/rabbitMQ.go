@@ -43,5 +43,7 @@ func (r *RabbitMQ) destroy() {
 func InitMq() {
 	InitRabbitMQ()
 	// 初始化Follow的相关消息队列，并开启消费。
+	InitMessageRabbitMQ()
 	InitFollowRabbitMQ()
+
 }
