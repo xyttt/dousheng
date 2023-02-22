@@ -24,6 +24,14 @@ func (UserRaw) TableName() string {
 	return "users"
 }
 
+type UserId struct {
+	ID uint `gorm:"primarykey"`
+}
+
+func (UserId) TableName() string {
+	return "users"
+}
+
 type DouyinRelationActionRequest struct {
 	UserId     int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`             // 用户id
 	Token      string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`                              // 用户鉴权token

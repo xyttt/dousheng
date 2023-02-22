@@ -158,7 +158,7 @@ func FollowerList(targetId int64, fromID int64) (FollowUserList []*data.User, er
 			}
 			redis.RedisUnlock(lockNum, Id, redis.GetRdbFollowerClient())
 			return FollowUserList, nil
-		} else { //获取锁失败，睡眠一段时间重新查询,可能会出现数据还没写完就去读了
+		} else { //获取锁失败，睡眠一段时间重新查询,
 			for i := 0; i < 100; i++ {
 				time.Sleep(time.Millisecond * 100)
 				FollowUserList, err = redis.GetFanListCache(strconv.FormatInt(targetId, 10))

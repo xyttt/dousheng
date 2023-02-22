@@ -7,6 +7,7 @@ require (
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang-jwt/jwt/v4 v4.4.3
+	github.com/importcjj/sensitive v0.0.0-20200106142752-42d1c505be7b
 	github.com/minio/minio-go/v7 v7.0.47
 	github.com/satori/go.uuid v1.2.0
 	github.com/streadway/amqp v1.0.0

@@ -2,7 +2,10 @@ package redis
 
 import (
 	"context"
+	"dousheng/dao"
+	"dousheng/data"
 	"github.com/go-redis/redis/v8"
+	"log"
 	"time"
 )
 
@@ -11,6 +14,7 @@ var RdbFollowers *redis.Client
 var RdbFollowing *redis.Client
 var RdbFriends *redis.Client
 var RdbRelations *redis.Client
+var StarUsers map[int64]data.Empty
 
 func InitRedis() {
 	RdbFollowers = redis.NewClient(&redis.Options{
@@ -49,6 +53,20 @@ func InitRedis() {
 		DB:       3, // 当前用户是否关注了自己粉丝信息存入 DB1.
 	})
 
+	//从数据库加载大V的信息到本地Set
+	go GetStarUsers()
+}
+
+func GetStarUsers() {
+	var Stars []data.UserId
+	err := dao.GetDB().Where("is_star = 1").Find(&Stars).Error
+	if err != nil {
+		log.Println("Find Stars err:", err.Error())
+		return
+	}
+	for star := range Stars {
+		StarUsers[int64(star)] = data.Empty{}
+	}
 }
 
 func GetRdbFriendsClient() *redis.Client {

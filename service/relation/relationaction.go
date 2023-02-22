@@ -35,7 +35,7 @@ func DeleteFollowRelation(userId int64, targetId int64) (bool, error) {
 	// 记录日志
 	log.Println("消息打入成功。")
 	// 更新redis信息。
-	return updateRedisWithDel(userId, targetId)
+	return true, nil
 }
 func RelationAction(req *data.DouyinRelationActionRequest) error {
 	// 1-关注
@@ -47,12 +47,4 @@ func RelationAction(req *data.DouyinRelationActionRequest) error {
 		go DeleteFollowRelation(req.UserId, req.ToUserId)
 	}
 	return nil
-}
-
-func updateRedisWithAdd(userId int64, targetId int64) (bool, error) {
-	return true, nil
-}
-
-func updateRedisWithDel(userId int64, targetId int64) (bool, error) {
-	return true, nil
 }

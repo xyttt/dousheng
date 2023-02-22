@@ -2,6 +2,7 @@ package controller
 
 import (
 	"dousheng/data"
+	"dousheng/middleware/filter"
 	service "dousheng/service/relation"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -74,6 +75,7 @@ func MessageAction(c *gin.Context) {
 	uid, err := strconv.Atoi(c.Query("to_user_id"))
 	action, err := strconv.Atoi(c.Query("action_type"))
 	content := c.Query("content")
+	content = filter.Filter.Replace(content, '#')
 	if err != nil {
 		c.JSON(http.StatusOK, data.Response{StatusCode: -1, StatusMsg: err.Error()})
 		return

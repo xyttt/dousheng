@@ -21,6 +21,7 @@ type users struct {
 	Password       string `gorm:"column:password; not null; type:varchar(255); comment:'用户密码'"`
 	FollowingCount int64  `gorm:"column:following_count; default:0; type:varchar(255); comment:'关注数量'"`
 	FollowerCount  int64  `gorm:"column:follower_count; default:0; type:varchar(255); comment:'粉丝数量'"`
+	IsStar         int64  `gorm:"column:is_star; default:0; type:varchar(255); comment:'是否为大V'"`
 }
 
 type videos struct {
@@ -48,8 +49,8 @@ type follows struct {
 
 type messages struct {
 	gorm.Model
-	UserId   int64  `gorm:"column:user_id; not null; type:bigint; comment:'消息发送者id'"`
-	ToUserId int64  `gorm:"column:to_user_id; not null; type:bigint; comment:'消息接收者id'"`
+	UserId   int64  `gorm:"column:user_id; not null; type:bigint;Index:talk,priority:11; comment:'消息发送者id'"`
+	ToUserId int64  `gorm:"column:to_user_id; not null; type:bigint;Index:talk,priority:12; comment:'消息接收者id'"`
 	Content  string `gorm:"column:content; not null; type:varchar(255); comment:'消息内容'"`
 }
 

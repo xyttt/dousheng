@@ -4,6 +4,7 @@ import (
 	"dousheng/dao"
 	"dousheng/gateway"
 	"dousheng/middleware/MinIO"
+	"dousheng/middleware/filter"
 	tool "dousheng/middleware/rabbitMQ"
 	"dousheng/middleware/redis"
 	"github.com/gin-gonic/gin"
@@ -17,6 +18,7 @@ func main() {
 
 	tool.InitMq()
 	redis.InitRedis()
+	filter.InitFilter()
 	//go service.RunMessageServer() //这是什么意思？？
 
 	r := gin.Default()

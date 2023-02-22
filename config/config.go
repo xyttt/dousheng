@@ -11,6 +11,7 @@ const DBname = "simpledouyin"
 
 const MaxFreeConn = 20
 const MaxConn = 100
+const MaxQueryNumber = 100
 
 //const DBtimeout = "10s"
 
