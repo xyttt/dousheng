@@ -71,8 +71,13 @@ func (v VideoServiceImpl) Feed(latestTime time.Time, userId int64) ([]data.Video
 		log.Printf("failed with PkgVideosByVideoid: %v", err)
 		return nil, time.Now().Unix(), err
 	}
+	var nestTime time.Time
+	if len(dbvideos) > 0 {
+		nestTime = dbvideos[len(dbvideos)-1].PublishTime
+	} else {
+		nestTime = latestTime
+	}
 
-	nestTime := dbvideos[len(dbvideos)-1].PublishTime
 	return videos, nestTime.Unix(), err
 }
 

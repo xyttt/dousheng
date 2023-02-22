@@ -19,3 +19,6 @@ gogogo 团队
   2023.2.13 wangmingxian 简单说明：完成 Register, Login, User 三个部分及 jwt 鉴权
 
   2023.2.18 zk 完成/douyin/favorite/action/接口，继续写/douyin/favorite/list/接口需要 Video 和 User 的完整的数据库
+
+补充：config MinIO配置Endpoint应改为服务器（即本机）ip，即可正常播放视频
+

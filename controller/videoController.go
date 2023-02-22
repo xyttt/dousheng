@@ -37,14 +37,12 @@ func Feed(c *gin.Context) {
 	}
 	log.Printf("latestTime UTS:%v", latestTime)
 
-	// TODO:user_id JWT
-	strToken := c.Query("token")
-	userToken, _ := strconv.ParseInt(strToken, 10, 64)
-	userID := userToken
+	strUserId := c.GetString("userId")
+	userId, _ := strconv.ParseInt(strUserId, 10, 64)
 
 	var videoService service.VideoServiceImpl
 
-	videoList, nextTime, err := videoService.Feed(latestTime, userID)
+	videoList, nextTime, err := videoService.Feed(latestTime, userId)
 	if err != nil {
 		log.Printf("failed with videoService.Feed(latestTime, userID) : %v", err)
 		c.JSON(http.StatusOK, FeedResponse{
@@ -60,15 +58,8 @@ func Feed(c *gin.Context) {
 	})
 }
 
-// Publish check token then save upload file to public directory
 func Publish(c *gin.Context) {
-	//token := c.PostForm("token")
-	//
-	//if _, exist := usersLoginInfo[token]; !exist {
-	//	c.JSON(http.StatusOK, data.Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
-	//	return
-	//}
-	//TODO: token -> user
+
 	videoData, err := c.FormFile("data")
 	if err != nil {
 		c.JSON(http.StatusOK, data.Response{
@@ -79,8 +70,10 @@ func Publish(c *gin.Context) {
 	}
 	videoTitle := c.PostForm("title")
 	log.Printf("title : %v", videoTitle)
-	var userId int64
-	userId = 1
+
+	strUserId := c.GetString("userId")
+	userId, _ := strconv.ParseInt(strUserId, 10, 64)
+	log.Printf("user_id : %v", userId)
 
 	var videoService service.VideoServiceImpl
 	err = videoService.Publish(videoData, userId, videoTitle)
@@ -97,9 +90,8 @@ func Publish(c *gin.Context) {
 	})
 }
 
-// PublishList all users have same publish video list
 func PublishList(c *gin.Context) {
-	strUserId := c.GetString("user_id")
+	strUserId := c.GetString("userId")
 	userId, _ := strconv.ParseInt(strUserId, 10, 64)
 	log.Printf("user_id : %v", userId)
 
