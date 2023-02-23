@@ -48,6 +48,7 @@ func GetFavoriteList(user_id int64) ([]int64, error) {
 	return favoriteList, nil
 }
 
+// 返回的是DBVideo List
 func GetVideoListByVideoIds(favoriteList []int64) ([]data.Video, error) {
 	var videos []data.Video
 	db := GetDB()

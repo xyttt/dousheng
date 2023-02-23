@@ -18,9 +18,9 @@ type FavoriteActionResponse struct {
 }
 
 type FavoriteListResponse struct {
-	StatusCode int32        `json:"status_code"` // 状态码，0-成功，其他值-失败
-	StatusMsg  string       `json:"status_msg"`  // 返回状态描述
-	VideoList  []data.Video // 用户点赞视频列表
+	StatusCode int32                `json:"status_code"` // 状态码，0-成功，其他值-失败
+	StatusMsg  string               `json:"status_msg"`  // 返回状态描述
+	VideoList  []data.FavoriteVideo `json:"video_list"`  // 用户点赞视频列表
 }
 
 // FavoriteAction no practical effect, just check if token is valid
@@ -59,7 +59,7 @@ func FavoriteList(c *gin.Context) {
 	curId, _ := strconv.ParseInt(strCurId, 10, 64)
 	log.Println("userId", userId)
 	log.Println("curId(token)", curId)
-	var videos []data.Video // 这里Video数据的结构不太对，需要看看接口文档
+	var videos []data.FavoriteVideo
 	var err error
 	favorite := new(service.FavoriteServiceImpl)
 	videos, err = favorite.FavoriteList(userId, token)
@@ -77,5 +77,4 @@ func FavoriteList(c *gin.Context) {
 			VideoList:  videos,
 		})
 	}
-
 }
