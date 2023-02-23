@@ -27,6 +27,7 @@ type FavoriteListResponse struct {
 func FavoriteAction(c *gin.Context) {
 	strUserId := c.GetString("user_id")
 	userId, _ := strconv.ParseInt(strUserId, 10, 64)
+	log.Println("userId", userId)
 	strVideoId := c.Query("video_id")
 	videoId, _ := strconv.ParseInt(strVideoId, 10, 64)
 	strActionType := c.Query("action_type")
@@ -54,7 +55,7 @@ func FavoriteAction(c *gin.Context) {
 func FavoriteList(c *gin.Context) {
 	strUserId := c.Query("user_id") // 传来的参数
 	token := c.Query("token")
-	strCurId := c.GetString("user_id") // 从token中解析的参数
+	strCurId := c.GetString("userId") // 从token中解析的参数
 	userId, _ := strconv.ParseInt(strUserId, 10, 64)
 	curId, _ := strconv.ParseInt(strCurId, 10, 64)
 	log.Println("userId", userId)

@@ -2,10 +2,8 @@ package redis
 
 import (
 	"context"
-	"dousheng/dao"
 	"dousheng/data"
 	"github.com/go-redis/redis/v8"
-	"log"
 	"time"
 )
 
@@ -59,11 +57,11 @@ func InitRedis() {
 
 func GetStarUsers() {
 	var Stars []data.UserId
-	err := dao.GetDB().Where("is_star = 1").Find(&Stars).Error
-	if err != nil {
-		log.Println("Find Stars err:", err.Error())
-		return
-	}
+	//err := dao.GetDB().Where("is_star = 1").Find(&Stars).Error
+	//if err != nil {
+	//	log.Println("Find Stars err:", err.Error())
+	//	return
+	//}
 	for star := range Stars {
 		StarUsers[int64(star)] = data.Empty{}
 	}

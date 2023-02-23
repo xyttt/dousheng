@@ -19,7 +19,6 @@ func main() {
 	tool.InitMq()
 	redis.InitRedis()
 	filter.InitFilter()
-	//go service.RunMessageServer() //这是什么意思？？
 
 	r := gin.Default()
 
